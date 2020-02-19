@@ -1,1 +1,1 @@
-# js30-26-stripe-follow-along-dropdown
+# JavaScript 30 #26: Stripe Follow-Along Dropdown
