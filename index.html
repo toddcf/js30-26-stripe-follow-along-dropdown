@@ -142,10 +142,12 @@
     display: none;
   }
 
+  /* Keep separate from opacity transition because this happens first */
   .trigger-enter .dropdown {
     display: block;
   }
 
+  /* Keep separate from display transition because it happens 150ms later */
   .trigger-enter-active .dropdown {
     opacity: 1;
   }
@@ -229,7 +231,50 @@
 
   const nav = document.querySelector('.top');
 
-  // RESUME: 4:45
+  // Listen for hover in, hover out, mouse in, and mouse leave on each item:
+  function handleEnter() {
+    // Display and animate content:
+    this.classList.add('trigger-enter');
+    setTimeout( () => {
+      // Prevent timeout problems if user enter and exits the hovering too rapidly:
+      if(this.classList.contains('trigger-enter')) {
+        this.classList.add('trigger-enter-active')
+      }
+    }, 150);
+    // Show white background:
+    background.classList.add('open');
+
+    // Get the background that exists inside of the element that is being hovered over:
+    const dropdown = this.querySelector('.dropdown');
+    const dropdownCoords = dropdown.getBoundingClientRect();
+    console.log(dropdownCoords);
+    
+    // Get coordinates for the nav so you can position the background in relation to it:
+    const navCoords = nav.getBoundingClientRect();
+
+    // Calculate in relation to each other:
+    const coords = {
+      height: dropdownCoords.height,
+      width: dropdownCoords.width,
+      top: dropdownCoords.top - navCoords.top,
+      left: dropdownCoords.left
+    };
+
+    // Set white background height and width to match the :
+    background.style.setProperty('width', `${coords.width}px`);
+    background.style.setProperty('height', `${coords.height}px`);
+    background.style.setProperty('transform', `translate(${coords.left}px, ${coords.top}px)`);
+  }
+
+  function handleLeave() {
+    // Un-display content:
+    this.classList.remove('trigger-enter', 'trigger-enter-active');
+    // Remove white background:
+    background.classList.remove('open');
+  }
+
+  triggers.forEach(trigger => trigger.addEventListener('mouseenter', handleEnter));
+  triggers.forEach(trigger => trigger.addEventListener('mouseleave', handleLeave));
 
 </script>
 
