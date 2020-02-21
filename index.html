@@ -225,28 +225,27 @@
 
   // White background:
   const background = document.querySelector('.dropdownBackground');
-
+  // Nav:
   const nav = document.querySelector('.top');
 
   const hoverNav = {
     // Select all direct descendent list items of .cool:
     triggers: document.querySelectorAll('.cool > li'),
-    handleEnter: function() {
+    handleEnter: (e) => {
       // Display and animate content:
-      this.classList.add('trigger-enter');
+      e.target.classList.add('trigger-enter');
       setTimeout( () => {
         // Prevent timeout problems if user enter and exits the hovering too rapidly:
-        if(this.classList.contains('trigger-enter')) {
-          this.classList.add('trigger-enter-active')
+        if(e.target.classList.contains('trigger-enter')) {
+          e.target.classList.add('trigger-enter-active')
         }
       }, 150);
       // Show white background:
       background.classList.add('open');
 
       // Get the background that exists inside of the element that is being hovered over:
-      const dropdown = this.querySelector('.dropdown');
+      const dropdown = e.currentTarget.querySelector('.dropdown');
       const dropdownCoords = dropdown.getBoundingClientRect();
-      console.log(dropdownCoords);
       
       // Get coordinates for the nav so you can position the background in relation to it:
       const navCoords = nav.getBoundingClientRect();
@@ -264,9 +263,9 @@
       background.style.setProperty('height', `${coords.height}px`);
       background.style.setProperty('transform', `translate(${coords.left}px, ${coords.top}px)`);
     },
-    handleLeave: function() {
+    handleLeave: (e) => {
       // Un-display content:
-      this.classList.remove('trigger-enter', 'trigger-enter-active');
+      e.currentTarget.classList.remove('trigger-enter', 'trigger-enter-active');
       // Remove white background:
       background.classList.remove('open');
     },
